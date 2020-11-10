@@ -2,34 +2,64 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define BUFFERSIZE 10
 
-struct Car
+typedef struct
 {
     char* model;
     char* owner_surname;
     char* owner_name;
     int engine_power;
     int mileage;
-};
+}Car;
 
-struct Car* add_car(struct Car* car_arr, int* size);
+Car* add_car(struct Car* car_arr, int* size);
 char* read_str();
 int read_num();
-void show_records(struct Car* car_arr, int size);
+void show_records(Car* car_arr, int size);
 void print_line(int length);
+Car* copy_car_arr(Car* car_arr, int size);
+Car* sort_by_owner_name(Car* car_arr, int size);
+
 
 int main()
 {
+    Car* arr = malloc(sizeof(Car) * 5);
+    Car temp_car;
+    int r = 5;
 
+    temp_car.engine_power = 12;
+    temp_car.mileage = 12;
+    temp_car.model = "www";
+    temp_car.owner_surname = "www";
+    temp_car.owner_name = "b";
+
+    arr[0] = temp_car;
+    temp_car.owner_name = "a";
+    arr[1] = temp_car;
+    temp_car.owner_name = "c";
+    arr[2] = temp_car;
+    temp_car.owner_name = "a";
+    arr[3] = temp_car;
+    temp_car.owner_name = "b";
+    arr[4] = temp_car;
+
+    //arr = add_car(arr, &r);
+
+    show_records(arr, r);
+    arr = sort_by_owner_name(arr, r);
+    show_records(arr, r);
+
+    free(arr);
 
     return 0;
 }
 
-struct Car* add_car(struct Car* car_arr, int* size)
+Car* add_car(Car* car_arr, int* size)
 {
-    struct Car temp_car;
+    Car temp_car;
 
     printf("Adding information about new car\n\n");
     printf("Enter car model: ");
@@ -43,7 +73,7 @@ struct Car* add_car(struct Car* car_arr, int* size)
     printf("Enter mileage: ");
     temp_car.mileage = read_num();
 
-    car_arr = realloc(car_arr, (*(size)+1) * sizeof(struct Car));
+    car_arr = realloc(car_arr, (*(size)+1) * sizeof(Car));
     car_arr[*size] = temp_car;
     *size += 1;
 
@@ -91,16 +121,16 @@ int read_num()
 
     return result;
 }
-void show_records(struct Car* car_arr, int size)
+void show_records(Car* car_arr, int size)
 {
     int i, text_size = 0;
 
-    text_size = printf("Car model\t Owner surname\t Owner name\t Engine power\t\t Mileage\n\n");
-    print_line(text_size + 10);
+    text_size = printf("Car model        Owner surname         Owner name      Engine power   Mileage\n\n");
+    print_line(text_size);
 
     for (i = 0; i < size; i++)
-        printf("%s\t\t%s\t\t%s\t\t%d\t\t%d\n", car_arr[i].model, car_arr[i].owner_surname, car_arr[i].owner_name, car_arr[i].engine_power, car_arr[i].mileage);
-    print_line(text_size + 10);
+        printf("%10s%20s%20s%15d%10d\n", car_arr[i].model, car_arr[i].owner_surname, car_arr[i].owner_name, car_arr[i].engine_power, car_arr[i].mileage);
+    print_line(text_size);
 }
 void print_line(int length)
 {
@@ -108,4 +138,30 @@ void print_line(int length)
     for (i = 0; i < length; i++)
         printf("-");
     printf("\n");
+}
+Car* sort_by_owner_name(Car* car_arr, int size)
+{
+    int i, j;
+    Car temp_car, * result_arr = copy_car_arr(car_arr, size);
+
+    for (i = 0; i < size; i++)
+        for (j = 0; j < size - i - 1; j++)
+            if (strcmp(result_arr[j + 1].owner_name, result_arr[j].owner_name) < 0)
+            {
+                temp_car = result_arr[j + 1];
+                result_arr[j + 1] = result_arr[j];
+                result_arr[j] = temp_car;
+            }
+
+    return result_arr;
+}
+Car* copy_car_arr(Car* car_arr, int size)
+{
+    Car* new_arr = malloc(size * sizeof(Car));
+    int i;
+
+    for (i = 0; i < size; i++)
+        new_arr[i] = car_arr[i];
+
+    return new_arr;
 }
