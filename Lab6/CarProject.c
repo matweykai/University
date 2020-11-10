@@ -25,6 +25,7 @@ void print_line(int length);
 Car* copy_car_arr(Car* car_arr, int size);
 Car* sort_by_owner_name(Car* car_arr, int size);
 void find_cars_by_model(Car* car_arr, int size);
+void find_owners_by_mileage(Car* car_arr, int size);
 
 
 int main()
@@ -41,18 +42,22 @@ int main()
 
     arr[0] = temp_car;
     temp_car.model = "a";
+    temp_car.mileage = 10;
     arr[1] = temp_car;
     temp_car.model = "c";
+    temp_car.mileage = 100;
     arr[2] = temp_car;
     temp_car.model = "a";
+    temp_car.mileage = 120;
     arr[3] = temp_car;
     temp_car.model = "b";
+    temp_car.mileage = 23;
     arr[4] = temp_car;
 
     //arr = add_car(arr, &r);
 
     show_records(arr, r);
-    find_cars_by_model(arr, r);
+    find_owners_by_mileage(arr, r);
 
     free(arr);
 
@@ -191,4 +196,30 @@ void find_cars_by_model(Car* car_arr, int size)
     }
 
     free(temp_car_arr);
+}
+void find_owners_by_mileage(Car* car_arr, int size)
+{
+    int i, found = FALSE;
+    int mileage = -1;
+
+    printf("Find owners of cars with mileage over some value\n\n");
+    printf("Enter minimum mileage: ");
+
+    while (TRUE)
+    {
+        mileage = read_num();
+        if (mileage < 0)
+            printf("Mileage can't be negative number. Repeat please: ");
+        else
+            break;
+    }
+
+    for (i = 0; i < size; i++)
+        if (car_arr[i].mileage >= mileage)
+        {
+            found = TRUE;
+            printf("%10s  %10s %10s\n", car_arr[i].model, car_arr[i].owner_name, car_arr[i].owner_surname);
+        }
+    if (!found)
+        printf("There is no cars with such mileage in our list\n");
 }
