@@ -5,6 +5,8 @@
 #include <string.h>
 
 #define BUFFERSIZE 10
+#define TRUE 1
+#define FALSE 0
 
 typedef struct
 {
@@ -22,6 +24,7 @@ void show_records(Car* car_arr, int size);
 void print_line(int length);
 Car* copy_car_arr(Car* car_arr, int size);
 Car* sort_by_owner_name(Car* car_arr, int size);
+void find_cars_by_model(Car* car_arr, int size);
 
 
 int main()
@@ -37,20 +40,19 @@ int main()
     temp_car.owner_name = "b";
 
     arr[0] = temp_car;
-    temp_car.owner_name = "a";
+    temp_car.model = "a";
     arr[1] = temp_car;
-    temp_car.owner_name = "c";
+    temp_car.model = "c";
     arr[2] = temp_car;
-    temp_car.owner_name = "a";
+    temp_car.model = "a";
     arr[3] = temp_car;
-    temp_car.owner_name = "b";
+    temp_car.model = "b";
     arr[4] = temp_car;
 
     //arr = add_car(arr, &r);
 
     show_records(arr, r);
-    arr = sort_by_owner_name(arr, r);
-    show_records(arr, r);
+    find_cars_by_model(arr, r);
 
     free(arr);
 
@@ -164,4 +166,29 @@ Car* copy_car_arr(Car* car_arr, int size)
         new_arr[i] = car_arr[i];
 
     return new_arr;
+}
+void find_cars_by_model(Car* car_arr, int size)
+{
+    char* model;
+    int i, found_num = 0;
+    Car* temp_car_arr = malloc(size * sizeof(Car));
+
+
+    printf("Car search\n");
+    printf("Enter car model: ");
+    model = read_str();
+
+    for (i = 0; i < size; i++)
+        if (strcmp(car_arr[i].model, model) == 0)
+            temp_car_arr[found_num++] = car_arr[i];
+
+    if (!found_num)
+        printf("There is no cars with such model in our list");
+    else
+    {
+        printf("Found cars:\n\n");
+        show_records(temp_car_arr, found_num);
+    }
+
+    free(temp_car_arr);
 }
