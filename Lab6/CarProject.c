@@ -47,7 +47,7 @@ Car* start_menu(Car* car_arr, int* size)
     int exit = FALSE;
 
     printf("This is something like car database. You are welcome :)\n");
-    printf("Press any key\n");
+    printf("Press any key");
     _getch();
 
     while (!exit)
@@ -59,7 +59,7 @@ Car* start_menu(Car* car_arr, int* size)
         printf(" 3  - Find owners by mileage of his car\n");
         printf(" 4  - Find cars by model\n");
         printf(" 5  - Leave the program\n");
-        printf("Enter function number - ");
+        printf("\nEnter function number - ");
         pressed_button = _getch();
 
         system("cls");
@@ -88,7 +88,7 @@ Car* start_menu(Car* car_arr, int* size)
             continue;
             break;
         }
-        printf("Press any key to return to menu\n");
+        printf("Press any key to return to menu");
         _getch();
     }
     return car_arr;
@@ -234,7 +234,7 @@ void find_cars_by_model(Car* car_arr, int size)
             temp_car_arr[found_num++] = car_arr[i];
 
     if (!found_num)
-        printf("There is no cars with such model in our list");
+        printf("There is no cars with such model in our list\n");
     else
     {
         printf("Found cars:\n\n");
@@ -245,8 +245,8 @@ void find_cars_by_model(Car* car_arr, int size)
 }
 void find_owners_by_mileage(Car* car_arr, int size)
 {
-    int i, found = FALSE;
-    int mileage = -1;
+    int i, found_num = 0, mileage = -1;
+    Car* temp_car_arr = malloc(sizeof(Car) * size);
 
     printf("Find owners of cars with mileage over some value\n\n");
     printf("Enter minimum mileage: ");
@@ -263,9 +263,19 @@ void find_owners_by_mileage(Car* car_arr, int size)
     for (i = 0; i < size; i++)
         if (car_arr[i].mileage >= mileage)
         {
-            found = TRUE;
-            printf("%10s  %10s %10s\n", car_arr[i].model, car_arr[i].owner_name, car_arr[i].owner_surname);
+            temp_car_arr[found_num].owner_name = car_arr[i].owner_name;
+            temp_car_arr[found_num].owner_surname = car_arr[i].owner_surname;
+            found_num++;
         }
-    if (!found)
+    if (!found_num)
         printf("There is no cars with such mileage in our list\n");
+    else
+    {
+        i = printf("          Owner name        Owner surname\n");
+        print_line(i);
+        temp_car_arr = sort_by_owner_name(temp_car_arr, found_num);
+        for (i = 0; i < found_num; i++)
+            printf("%20s %20s\n", temp_car_arr[i].owner_name, temp_car_arr[i].owner_surname);
+    }
+    free(temp_car_arr);
 }
