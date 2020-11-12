@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <conio.h>
 
 #define BUFFERSIZE 10
 #define TRUE 1
@@ -26,47 +27,76 @@ Car* copy_car_arr(Car* car_arr, int size);
 Car* sort_by_owner_name(Car* car_arr, int size);
 void find_cars_by_model(Car* car_arr, int size);
 void find_owners_by_mileage(Car* car_arr, int size);
+Car* start_menu(Car* car_arr, int* size);
 
 
 int main()
 {
-    Car* arr = malloc(sizeof(Car) * 5);
-    Car temp_car;
-    int r = 5;
+    Car* car_arr = malloc(sizeof(Car));
+    int size = 0;
 
-    temp_car.engine_power = 12;
-    temp_car.mileage = 12;
-    temp_car.model = "www";
-    temp_car.owner_surname = "www";
-    temp_car.owner_name = "b";
+    car_arr = start_menu(car_arr, &size);
 
-    arr[0] = temp_car;
-    temp_car.model = "a";
-    temp_car.mileage = 10;
-    arr[1] = temp_car;
-    temp_car.model = "c";
-    temp_car.mileage = 100;
-    arr[2] = temp_car;
-    temp_car.model = "a";
-    temp_car.mileage = 120;
-    arr[3] = temp_car;
-    temp_car.model = "b";
-    temp_car.mileage = 23;
-    arr[4] = temp_car;
-
-    //arr = add_car(arr, &r);
-
-    show_records(arr, r);
-    find_owners_by_mileage(arr, r);
-
-    free(arr);
+    free(car_arr);
 
     return 0;
 }
+Car* start_menu(Car* car_arr, int* size)
+{
+    char pressed_button;
+    int exit = FALSE;
 
+    printf("This is something like car database. You are welcome :)\n");
+    printf("Press any key\n");
+    _getch();
+
+    while (!exit)
+    {
+        system("cls");
+        printf("NUM - FUNCTION\n\n");
+        printf(" 1  - Add new record\n");
+        printf(" 2  - Show all records\n");
+        printf(" 3  - Find owners by mileage of his car\n");
+        printf(" 4  - Find cars by model\n");
+        printf(" 5  - Leave the program\n");
+        printf("Enter function number - ");
+        pressed_button = _getch();
+
+        system("cls");
+
+        switch (pressed_button)
+        {
+        case '1':
+            car_arr = add_car(car_arr, size);
+            break;
+        case '2':
+            show_records(car_arr, *size);
+            break;
+        case '3':
+            find_owners_by_mileage(car_arr, *size);
+            break;
+        case '4':
+            find_cars_by_model(car_arr, *size);
+            break;
+        case '5':
+            exit = TRUE;
+            continue;
+            break;
+        default:
+            printf("Wrong enter, please repeat...\n Press any key");
+            _getch();
+            continue;
+            break;
+        }
+        printf("Press any key to return to menu\n");
+        _getch();
+    }
+    return car_arr;
+}
 Car* add_car(Car* car_arr, int* size)
 {
     Car temp_car;
+    int temp_mileage, temp_engine_power;
 
     printf("Adding information about new car\n\n");
     printf("Enter car model: ");
@@ -76,9 +106,25 @@ Car* add_car(Car* car_arr, int* size)
     printf("Enter owner name: ");
     temp_car.owner_name = read_str();
     printf("Enter engine power: ");
-    temp_car.engine_power = read_num();
+    while (TRUE)
+    {
+        temp_engine_power = read_num();
+        if (temp_engine_power < 0)
+            printf("Engine power can't be negative number. Repeat please: ");
+        else
+            break;
+    }
+    temp_car.engine_power = temp_engine_power;
     printf("Enter mileage: ");
-    temp_car.mileage = read_num();
+    while (TRUE)
+    {
+        temp_mileage = read_num();
+        if (temp_mileage < 0)
+            printf("Mileage can't be negative number. Repeat please: ");
+        else
+            break;
+    }
+    temp_car.mileage = temp_mileage;
 
     car_arr = realloc(car_arr, (*(size)+1) * sizeof(Car));
     car_arr[*size] = temp_car;
