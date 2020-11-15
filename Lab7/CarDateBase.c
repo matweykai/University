@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
+#include <time.h>
 
 #define BUFFERSIZE 10
 #define TRUE 1
@@ -11,15 +12,15 @@
 
 typedef struct
 {
-  char* name;
-  char* surname;
+    char* name;
+    char* surname;
 }Fio;
 
 typedef struct
 {
-  int day;
-  char* month;
-  int year;
+    int day;
+    char* month;
+    int year;
 }Date;
 
 typedef struct
@@ -41,16 +42,21 @@ Car* sort_by_owner_name(Car* car_arr, int size);
 void find_cars_by_model(Car* car_arr, int size);
 void find_owners_by_mileage(Car* car_arr, int size);
 Car* start_menu(Car* car_arr, int* size);
+Date read_date();
+int month_in_int(char* word);
+Date current_date();
+void free_memory(Car* car_arr, int size);
 
 
 int main()
 {
+    system("mode con cols=100");
     Car* car_arr = malloc(sizeof(Car));
     int size = 0;
 
     car_arr = start_menu(car_arr, &size);
 
-    free(car_arr);
+    free_memory(car_arr, size);
 
     return 0;
 }
@@ -115,9 +121,9 @@ Car* add_car(Car* car_arr, int* size)
     printf("Enter car model: ");
     temp_car.model = read_str();
     printf("Enter owner surname: ");
-    temp_car.owner_surname = read_str();
+    temp_car.fio.surname = read_str();
     printf("Enter owner name: ");
-    temp_car.owner_name = read_str();
+    temp_car.fio.name = read_str();
     printf("Enter engine power: ");
     while (TRUE)
     {
@@ -138,6 +144,8 @@ Car* add_car(Car* car_arr, int* size)
             break;
     }
     temp_car.mileage = temp_mileage;
+    printf("Adding date of last service\n");
+    temp_car.service_date = read_date();
 
     car_arr = realloc(car_arr, (*(size)+1) * sizeof(Car));
     car_arr[*size] = temp_car;
@@ -187,15 +195,15 @@ int read_num()
 
     return result;
 }
-void show_records(Car* car_arr, int size)
+void show_records(Car* car_arr, int size) //Updated
 {
     int i, text_size = 0;
 
-    text_size = printf("Car model        Owner surname         Owner name      Engine power   Mileage\n\n");
+    text_size = printf("Car model        Owner surname         Owner name      Engine power   Mileage   Service Date\n\n");
     print_line(text_size);
 
     for (i = 0; i < size; i++)
-        printf("%10s%20s%20s%15d%10d\n", car_arr[i].model, car_arr[i].owner_surname, car_arr[i].owner_name, car_arr[i].engine_power, car_arr[i].mileage);
+        printf("%10s%20s%20s%15d%10d    %d %s %d\n", car_arr[i].model, car_arr[i].fio.surname, car_arr[i].fio.name, car_arr[i].engine_power, car_arr[i].mileage, car_arr[i].service_date.day, car_arr[i].service_date.month, car_arr[i].service_date.year);
     print_line(text_size);
 }
 void print_line(int length)
@@ -205,14 +213,14 @@ void print_line(int length)
         printf("-");
     printf("\n");
 }
-Car* sort_by_owner_name(Car* car_arr, int size)
+Car* sort_by_owner_name(Car* car_arr, int size) //Updated
 {
     int i, j;
     Car temp_car, * result_arr = copy_car_arr(car_arr, size);
 
     for (i = 0; i < size; i++)
         for (j = 0; j < size - i - 1; j++)
-            if (strcmp(result_arr[j + 1].owner_name, result_arr[j].owner_name) < 0)
+            if (strcmp(result_arr[j + 1].fio.name, result_arr[j].fio.name) < 0)
             {
                 temp_car = result_arr[j + 1];
                 result_arr[j + 1] = result_arr[j];
@@ -255,11 +263,12 @@ void find_cars_by_model(Car* car_arr, int size)
     }
 
     free(temp_car_arr);
+    free(model);
 }
-void find_owners_by_mileage(Car* car_arr, int size)
+void find_owners_by_mileage(Car* car_arr, int size) //Updated
 {
     int i, found_num = 0, mileage = -1;
-    Car* temp_car_arr = malloc(sizeof(Car) * size);
+    Car* temp_car_arr = malloc(sizeof(Car) * size), * sorted_car_arr = malloc(sizeof(Car) * size);
 
     printf("Find owners of cars with mileage over some value\n\n");
     printf("Enter minimum mileage: ");
@@ -276,8 +285,8 @@ void find_owners_by_mileage(Car* car_arr, int size)
     for (i = 0; i < size; i++)
         if (car_arr[i].mileage >= mileage)
         {
-            temp_car_arr[found_num].owner_name = car_arr[i].owner_name;
-            temp_car_arr[found_num].owner_surname = car_arr[i].owner_surname;
+            temp_car_arr[found_num].fio.name = car_arr[i].fio.name;
+            temp_car_arr[found_num].fio.surname = car_arr[i].fio.surname;
             found_num++;
         }
     if (!found_num)
@@ -286,9 +295,156 @@ void find_owners_by_mileage(Car* car_arr, int size)
     {
         i = printf("          Owner name        Owner surname\n");
         print_line(i);
-        temp_car_arr = sort_by_owner_name(temp_car_arr, found_num);
+        free(sorted_car_arr);
+        sorted_car_arr = sort_by_owner_name(temp_car_arr, found_num);
         for (i = 0; i < found_num; i++)
-            printf("%20s %20s\n", temp_car_arr[i].owner_name, temp_car_arr[i].owner_surname);
+            printf("%20s %20s\n", sorted_car_arr[i].fio.name, sorted_car_arr[i].fio.surname);
     }
+    free(sorted_car_arr);
     free(temp_car_arr);
+}
+Date read_date()
+{
+    int day, year;
+    char* month;
+    Date result;
+
+    printf("Enter day: ");
+    while (TRUE)
+    {
+        day = read_num();
+        if (day < 0 || day > 31)
+            printf("Wrong day, it can't be more than 31 and less than 1. Repeat please: ");
+        else
+            break;
+    }
+    printf("Enter month: ");
+    while (TRUE)
+    {
+        month = read_str();
+        if (month_in_int(month) == -1)
+        {
+            printf("Enter is wrong. Repeat enter: ");
+            free(month);
+        }
+        else
+            break;
+    }
+    printf("Enter year: ");
+    while (TRUE)
+    {
+        year = read_num();
+        if (year < 0)
+            printf("Year can't be negative number. Repeat enter: ");
+        else
+            break;
+    }
+
+    result.day = day;
+    result.month = month;
+    result.year = year;
+
+    return result;
+}
+int month_in_int(char* word)
+{
+    int i;
+
+    for (i = 0; i < strlen(word); i++)
+        word[i] = tolower(word[i]);
+
+    if (!strcmp(word, "january"))
+        return 1;
+    if (!strcmp(word, "february"))
+        return 2;
+    if (!strcmp(word, "march"))
+        return 3;
+    if (!strcmp(word, "april"))
+        return 4;
+    if (!strcmp(word, "may"))
+        return 5;
+    if (!strcmp(word, "june"))
+        return 6;
+    if (!strcmp(word, "july"))
+        return 7;
+    if (!strcmp(word, "august"))
+        return 8;
+    if (!strcmp(word, "september"))
+        return 9;
+    if (!strcmp(word, "october"))
+        return 10;
+    if (!strcmp(word, "november"))
+        return 11;
+    if (!strcmp(word, "december"))
+        return 12;
+
+    return -1;
+}
+Date current_date()
+{
+    time_t temp = time(NULL);
+    struct tm* current_date = localtime(&temp);
+    Date result;
+    char* month = "";
+    int i;
+
+    switch (current_date->tm_mon)
+    {
+    case 0:
+        month = "january";
+        break;
+    case 1:
+        month = "february";
+        break;
+    case 2:
+        month = "march";
+        break;
+    case 3:
+        month = "april";
+        break;
+    case 4:
+        month = "may";
+        break;
+    case 5:
+        month = "june";
+        break;
+    case 6:
+        month = "july";
+        break;
+    case 7:
+        month = "august";
+        break;
+    case 8:
+        month = "september";
+        break;
+    case 9:
+        month = "october";
+        break;
+    case 10:
+        month = "november";
+        break;
+    case 11:
+        month = "december";
+        break;
+    }
+
+    result.day = current_date->tm_mday;
+    result.year = 1900 + current_date->tm_year;
+    result.month = malloc(sizeof(char) * strlen(month) + 1);
+    for (i = 0; i <= strlen(month); i++)
+        result.month[i] = month[i];
+
+    return result;
+}
+void free_memory(Car* car_arr, int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        free(car_arr[i].fio.name);
+        free(car_arr[i].fio.surname);
+        free(car_arr[i].service_date.month);
+        free(car_arr[i].model);
+    }
+    free(car_arr);
 }
