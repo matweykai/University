@@ -46,6 +46,8 @@ Date read_date();
 int month_in_int(char* word);
 Date current_date();
 void free_memory(Car* car_arr, int size);
+int dist_bet_dates(Date date1, Date date2);
+void find_cars_with_service_limit(Car* car_arr, int size);
 
 
 int main()
@@ -77,7 +79,8 @@ Car* start_menu(Car* car_arr, int* size)
         printf(" 2  - Show all records\n");
         printf(" 3  - Find owners by mileage of his car\n");
         printf(" 4  - Find cars by model\n");
-        printf(" 5  - Leave the program\n");
+        printf(" 5  - Find cars with service date older than 18 months\n");
+        printf(" 6  - Leave the program\n");
         printf("\nEnter function number - ");
         pressed_button = _getch();
 
@@ -98,6 +101,9 @@ Car* start_menu(Car* car_arr, int* size)
             find_cars_by_model(car_arr, *size);
             break;
         case '5':
+            find_cars_with_service_limit(car_arr, *size);
+            break;
+        case '6':
             exit = TRUE;
             continue;
             break;
@@ -447,4 +453,24 @@ void free_memory(Car* car_arr, int size)
         free(car_arr[i].model);
     }
     free(car_arr);
+}
+int dist_bet_dates(Date date1, Date date2)
+{
+    int month_1 = month_in_int(date1.month), month_2 = month_in_int(date2.month);
+
+    return abs((date1.year * 12 + month_1) - (date2.year * 12 + month_2));
+}
+void find_cars_with_service_limit(Car* car_arr, int size)
+{
+    Car* found_cars = malloc(sizeof(Car) * size);
+    int i, found_cars_num = 0;
+
+    for (i = 0; i < size; i++)
+        if (dist_bet_dates(current_date(), car_arr[i].service_date) >= 18)
+            found_cars[found_cars_num++] = car_arr[i];
+
+    printf("Cars with service date older than 18 months: \n\n");
+    show_records(found_cars, found_cars_num);
+
+    free(found_cars);
 }
