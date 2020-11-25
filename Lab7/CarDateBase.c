@@ -52,23 +52,36 @@ void save_object_state(FILE* file, Car car);
 Car* get_object(FILE* file);
 Car* download_database(FILE* file, int* size);
 void save_database(FILE* file, Car* car_arr, int size);
+FILE* open_db(char* name);
 
 
 int main()
 {
-    /*system("mode con cols=100");
-    Car* car_arr = malloc(sizeof(Car));
+
+    system("mode con cols=100");
+
+    FILE* file = fopen("test.bin", "r+");
     int size = 0;
+    Car* car_arr;
+
+    if (file == NULL)
+    {
+        file = fopen("test.bin", "w");
+        car_arr = NULL;
+    }
+    else
+    {
+        fseek(file, 0, SEEK_SET);
+        car_arr = download_database(file, &size);
+    }
 
     car_arr = start_menu(car_arr, &size);
 
-    free_memory(car_arr, size);*/
-    FILE* file = fopen("test.bin", "a+");
-    int size;
-    Car* car_arr = download_database(file, &size);
-    show_records(car_arr, size);
+    save_database(file, car_arr, size);
+
     free_memory(car_arr, size);
     fclose(file);
+
     return 0;
 }
 Car* start_menu(Car* car_arr, int* size)
@@ -485,7 +498,6 @@ void find_cars_with_service_limit(Car* car_arr, int size)
 }
 void save_object_state(FILE *file, Car car)
 {
-    fseek(file, 0, SEEK_END);
     fprintf(file, "%s\n%s\n%s\n%d\n%s\n%d\n%d\n%d\n",
         car.model, car.fio.name, car.fio.surname, car.service_date.day,
         car.service_date.month, car.service_date.year, car.engine_power, car.mileage);
@@ -533,6 +545,7 @@ Car* download_database(FILE* file,int *size)
 void save_database(FILE *file, Car* car_arr, int size)
 {
     int i;
+    fseek(file, 0, SEEK_SET);
     for (i = 0; i < size; i++)
         save_object_state(file, car_arr[i]);
 }
