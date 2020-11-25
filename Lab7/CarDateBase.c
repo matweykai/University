@@ -33,7 +33,7 @@ typedef struct
 }Car;
 
 Car* add_car(struct Car* car_arr, int* size);
-char* read_str();
+char* read_str(FILE*);
 int read_num();
 void show_records(Car* car_arr, int size);
 void print_line(int length);
@@ -48,18 +48,27 @@ Date current_date();
 void free_memory(Car* car_arr, int size);
 int dist_bet_dates(Date date1, Date date2);
 void find_cars_with_service_limit(Car* car_arr, int size);
+void save_object_state(FILE* file, Car car);
+Car* get_object(FILE* file);
+Car* download_database(FILE* file, int* size);
+void save_database(FILE* file, Car* car_arr, int size);
 
 
 int main()
 {
-    system("mode con cols=100");
+    /*system("mode con cols=100");
     Car* car_arr = malloc(sizeof(Car));
     int size = 0;
 
     car_arr = start_menu(car_arr, &size);
 
+    free_memory(car_arr, size);*/
+    FILE* file = fopen("test.bin", "a+");
+    int size;
+    Car* car_arr = download_database(file, &size);
+    show_records(car_arr, size);
     free_memory(car_arr, size);
-
+    fclose(file);
     return 0;
 }
 Car* start_menu(Car* car_arr, int* size)
@@ -125,11 +134,11 @@ Car* add_car(Car* car_arr, int* size)
 
     printf("Adding information about new car\n\n");
     printf("Enter car model: ");
-    temp_car.model = read_str();
+    temp_car.model = read_str(stdin);
     printf("Enter owner surname: ");
-    temp_car.fio.surname = read_str();
+    temp_car.fio.surname = read_str(stdin);
     printf("Enter owner name: ");
-    temp_car.fio.name = read_str();
+    temp_car.fio.name = read_str(stdin);
     printf("Enter engine power: ");
     while (TRUE)
     {
@@ -159,12 +168,12 @@ Car* add_car(Car* car_arr, int* size)
 
     return car_arr;
 }
-char* read_str()
+char* read_str(FILE *source)
 {
     char buffer[BUFFERSIZE], * result;
     int str_len, res_str_len = 0, i;
 
-    fgets(buffer, BUFFERSIZE, stdin);
+    fgets(buffer, BUFFERSIZE, source);
 
     str_len = strlen(buffer);
     result = malloc(str_len * sizeof(char));
@@ -254,7 +263,7 @@ void find_cars_by_model(Car* car_arr, int size)
 
     printf("Car search\n");
     printf("Enter car model: ");
-    model = read_str();
+    model = read_str(stdin);
 
     for (i = 0; i < size; i++)
         if (strcmp(car_arr[i].model, model) == 0)
@@ -327,7 +336,7 @@ Date read_date()
     printf("Enter month: ");
     while (TRUE)
     {
-        month = read_str();
+        month = read_str(stdin);
         if (month_in_int(month) == -1)
         {
             printf("Enter is wrong. Repeat enter: ");
@@ -473,4 +482,57 @@ void find_cars_with_service_limit(Car* car_arr, int size)
     show_records(found_cars, found_cars_num);
 
     free(found_cars);
+}
+void save_object_state(FILE *file, Car car)
+{
+    fseek(file, 0, SEEK_END);
+    fprintf(file, "%s\n%s\n%s\n%d\n%s\n%d\n%d\n%d\n",
+        car.model, car.fio.name, car.fio.surname, car.service_date.day,
+        car.service_date.month, car.service_date.year, car.engine_power, car.mileage);
+}
+Car* get_object(FILE *file)
+{
+    Car *result_object;
+
+    if (feof(file))
+        return NULL;
+
+    result_object = malloc(sizeof(Car));
+    result_object->model = read_str(file);
+    result_object->fio.name = read_str(file);
+    result_object->fio.surname = read_str(file);
+    fscanf(file, "%d\n", &result_object->service_date.day);
+    result_object->service_date.month = read_str(file);
+    fscanf(file, "%d\n", &result_object->service_date.year);
+    fscanf(file, "%d\n", &result_object->engine_power);
+    fscanf(file, "%d\n", &result_object->mileage);
+
+    return result_object;
+}
+Car* download_database(FILE* file,int *size)
+{
+    Car* result_arr = NULL;
+    Car* temp_car;
+    *size = 0;
+
+    while (TRUE)
+    {
+        temp_car = get_object(file);
+        if (temp_car == NULL)
+            break;
+        else
+        {
+            result_arr = realloc(result_arr, sizeof(Car) * (*size + 1));
+            result_arr[*size] = *temp_car;
+            *size += 1;
+        }
+    }
+
+    return result_arr;
+}
+void save_database(FILE *file, Car* car_arr, int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+        save_object_state(file, car_arr[i]);
 }
