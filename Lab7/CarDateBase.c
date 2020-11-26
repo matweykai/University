@@ -77,6 +77,7 @@ int main()
 
     car_arr = start_menu(car_arr, &size);
 
+    fseek(file, 0, SEEK_SET);
     save_database(file, car_arr, size);
 
     free_memory(car_arr, size);
@@ -197,7 +198,7 @@ char* read_str(FILE *source)
 
     while (str_len == BUFFERSIZE - 1 && result[str_len - 1] != '\n')
     {
-        fgets(buffer, BUFFERSIZE, stdin);
+        fgets(buffer, BUFFERSIZE, source);
         str_len = strlen(buffer);
         result = realloc(result, (res_str_len + str_len) * sizeof(char));
 
@@ -545,7 +546,6 @@ Car* download_database(FILE* file,int *size)
 void save_database(FILE *file, Car* car_arr, int size)
 {
     int i;
-    fseek(file, 0, SEEK_SET);
     for (i = 0; i < size; i++)
         save_object_state(file, car_arr[i]);
 }
