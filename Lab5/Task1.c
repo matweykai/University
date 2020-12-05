@@ -200,7 +200,7 @@ void upper_word(char* word)
 char** edit_text(char** text, int str_num)
 {
     int same_words_num, i, j;
-    char** same_words;
+    char** same_words, **result_text;
 
     for (i = 0; i < str_num; i++)
     {
@@ -243,21 +243,25 @@ char** center_text(char** text, int str_num)
 }
 void work_with_text()
 {
-    char** text;
+    char** raw_text, **editted_text;
     int str_num = 0, i;
     char* temp_word;
     int temp_text_pos = 0;
 
-    text = read_text(&str_num);
+    raw_text = read_text(&str_num);
 
-    text = edit_text(text, str_num);
+    editted_text = edit_text(raw_text, str_num);
 
     printf("\n\n");
-    print_text(text, str_num);
+    print_text(editted_text, str_num);
 
     for (i = 0; i < str_num; i++)
-        free(text[i]);
-    free(text);
+    {
+        free(raw_text[i]);
+        free(editted_text[i]);
+    }
+    free(raw_text);
+    free(editted_text);
 }
 char* find_stop_word(char* str, char* stop_word)
 {
