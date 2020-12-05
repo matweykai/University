@@ -1,8 +1,8 @@
---------Task1---------
+//--------Task1-------- -
 
 /*
 
-	Для того чтобы закончить вводить текст нужно ввести no с пробелами по бокам: "_no_"( _ - это пробел)
+    Для того чтобы закончить вводить текст нужно ввести no с пробелами по бокам: "_no_"( _ - это пробел)
 
 */
 
@@ -25,6 +25,7 @@ void upper_word(char* word);
 char** edit_text(char** text, int str_num);
 char** center_text(char** text, int str_num);
 void work_with_text();
+char* find_stop_word(char* str, char* stop_word);
 
 
 int main()
@@ -47,9 +48,10 @@ char** read_text(int* str_num)
     char* new_str;
     char* no_pointer;
     int n;  //Controlling number of entered symbols
-    char no_word[] = " no ";
+    char no_word[] = "no";
     int continue_flag = 0;  //Flag means the continuing of reading
     char** text;
+    int distance = 0;
 
     new_str = (char*)malloc(sizeof(char));
     text = malloc(sizeof(char*));
@@ -75,7 +77,7 @@ char** read_text(int* str_num)
         else
         {
             continue_flag = FALSE;
-            no_pointer = (char*)strstr(new_str, no_word);  //Finding word "no" in str
+            no_pointer = find_stop_word(new_str, no_word);  //Finding word "no" in str
             if (no_pointer == NULL)
             {
                 text = add_str(text, new_str, *str_num);
@@ -83,8 +85,9 @@ char** read_text(int* str_num)
             }
             else
             {
-                new_str = (char*)realloc(new_str, ((no_pointer - new_str) + 1) * sizeof(char)); //Saving all before word "no"
-                new_str[no_pointer - new_str] = '\0';
+                distance = no_pointer - new_str;
+                new_str = (char*)realloc(new_str, (distance + 1) * sizeof(char)); //Saving all before word "no"
+                new_str[distance] = '\0';
                 text = add_str(text, new_str, *str_num);
                 *str_num += 1;
                 break;
@@ -255,4 +258,23 @@ void work_with_text()
     for (i = 0; i < str_num; i++)
         free(text[i]);
     free(text);
+}
+char* find_stop_word(char* str, char* stop_word)
+{
+    int has_found = 0;
+    char* temp_word_ptr = strstr(str, stop_word);
+    char* result_str = NULL;
+
+    while (temp_word_ptr != NULL)
+    {
+        if (!isalpha(*(temp_word_ptr + strlen(stop_word))) && (temp_word_ptr - str == 0 || !isalpha(*(temp_word_ptr - 1))))
+        {
+            has_found = 1;
+            result_str = temp_word_ptr;
+            break;
+        }
+        temp_word_ptr = strstr(temp_word_ptr + 1, stop_word);
+    }
+
+    return temp_word_ptr;
 }
