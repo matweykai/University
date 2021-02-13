@@ -18,12 +18,16 @@ Teacher::~Teacher()
 }
 void Teacher::set_dep_list(list<string>* dep_list)
 {
-	this->dep_list = dep_list;
+	if(dep_list != nullptr)
+		this->dep_list = dep_list;
 }
 void Teacher::set_status_list(list<string>* status_list)
 {
-	this->status_list = status_list;
+	if(status_list != nullptr)
+		this->status_list = status_list;
 }
+list<string>* Teacher::get_dep_list() { return dep_list; }
+list<string>* Teacher::get_status_list() { return status_list; }
 int Teacher::get_count() 
 {
 	return count;

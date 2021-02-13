@@ -20,6 +20,8 @@ public:
 
 	void set_dep_list(list<string>* dep_list);
 	void set_status_list(list<string>* status_list);
+	list<string>* get_dep_list();
+	list<string>* get_status_list();
 	int static get_count();
 
 	~Teacher();
