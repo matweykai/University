@@ -16,6 +16,12 @@ Teacher::~Teacher()
 	delete fullname;
 	count--;
 }
+Teacher::Teacher(const Teacher& teacher) 
+{
+	this->department = teacher.department;
+	this->status = teacher.status;
+	this->fullname = new FullName(*teacher.fullname);
+}
 void Teacher::set_dep_list(list<string>* dep_list)
 {
 	if(dep_list != nullptr)

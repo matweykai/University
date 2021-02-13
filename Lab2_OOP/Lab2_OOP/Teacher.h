@@ -17,6 +17,7 @@ class Teacher
 
 public:
 	Teacher(char* name, char* surname, char* second_name, int department, int status);
+	Teacher(const Teacher& teacher);
 
 	void set_dep_list(list<string>* dep_list);
 	void set_status_list(list<string>* status_list);
