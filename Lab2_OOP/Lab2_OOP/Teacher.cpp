@@ -32,3 +32,32 @@ int Teacher::get_count()
 {
 	return count;
 }
+char* Teacher::get_department() 
+{
+	list<string>::iterator iter = dep_list->begin();
+
+	for (int i = 0; i < department; i++)
+		iter++;
+	//Full copy
+	char* result = new char[(*iter).length() + 1];
+	for (int i = 0; i < (*iter).length(); i++)
+		result[i] = (*iter)[i];
+	result[(*iter).length()] = '\0';
+
+	return result;
+}
+char* Teacher::get_status() 
+{
+	list<string>::iterator iter = status_list->begin();
+
+	for (int i = 0; i < status; i++)
+		iter++;
+	//Full copy
+	char* result = new char[(*iter).length() + 1];
+	for (int i = 0; i < (*iter).length(); i++)
+		result[i] = (*iter)[i];
+	result[(*iter).length()] = '\0';
+
+	return result;
+}
+FullName Teacher::get_fullname() { return FullName(*fullname); }
