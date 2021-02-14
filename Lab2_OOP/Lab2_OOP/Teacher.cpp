@@ -11,6 +11,16 @@ Teacher::Teacher(char* name, char* surname, char* second_name, int department, i
 	this->fullname = new FullName(name, surname, second_name);
 	count++;
 }
+Teacher::Teacher() 
+{
+	this->department = 0;
+	this->status = 0;
+	char* name = new char[] {""};
+	char* surname = new char[] {""};
+	char* second_name = new char[] {""};
+	this->fullname = new FullName(name, surname, second_name);
+	count++;
+}
 Teacher::~Teacher() 
 {
 	delete fullname;
@@ -66,4 +76,4 @@ char* Teacher::get_status()
 
 	return result;
 }
-FullName Teacher::get_fullname() { return FullName(*fullname); }
+FullName* Teacher::get_fullname() { return new FullName(*fullname); }
