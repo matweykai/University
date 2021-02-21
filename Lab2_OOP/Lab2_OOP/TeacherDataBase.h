@@ -54,6 +54,7 @@ class TeacherDataBase
 public:
 
 	TeacherDataBase(string file_path);
+	Teacher* get_arr();
 	Teacher* find_teacher(FullName fullname);
 	Teacher* sorted_list();
 	Teacher* filter_by_status(int status, int* founded);
@@ -61,4 +62,4 @@ public:
 	~TeacherDataBase();
 };
 
-int max_size(Teacher** arr);
+int max_size(Teacher* arr, int size = -1);

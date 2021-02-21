@@ -79,10 +79,12 @@ char* Teacher::get_status()
 	return result;
 }
 FullName* Teacher::get_fullname() { return new FullName(*fullname); }
-int max_size(Teacher* arr)
+int max_size(Teacher* arr, int size)
 {
+	if (size < 0)
+		size = Teacher::get_count();
 	int result = 0;
-	for (int i = 0; i < Teacher::get_count(); i++)
+	for (int i = 0; i < size; i++)
 	{
 		FullName* fullname = arr[i].get_fullname();
 		int temp_len = strlen(fullname->get_name()) + strlen(fullname->get_surname()) + strlen(fullname->get_second_name());
@@ -227,6 +229,7 @@ void TeacherDataBase::add_teacher(Teacher* teacher)	//Checked
 
 	arr = new_arr;
 }
+Teacher* TeacherDataBase::get_arr() { return arr; }
 
 TeacherDataBase::~TeacherDataBase() 
 {
