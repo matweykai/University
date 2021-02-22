@@ -20,6 +20,8 @@ class Teacher
 	int status;
 	FullName* fullname;
 
+	~Teacher();
+
 public:
 	Teacher();
 	Teacher(char* name, char* surname, char* second_name, int department, int status);
@@ -34,10 +36,9 @@ public:
 	static list<string>* get_status_list();
 	int static get_count();
 	void swap(Teacher*);
+	void destroy(bool copy = false);
 
-	friend class TeacherDataBase;
-
-	~Teacher();
+	friend class TeacherDataBase;	
 };
 
 class TeacherDataBase

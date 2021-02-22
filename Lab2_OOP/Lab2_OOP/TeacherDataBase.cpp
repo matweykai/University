@@ -106,6 +106,13 @@ void Teacher::swap(Teacher* teacher)
 	this->status = t_status;
 	this->fullname = t_fullName;
 }
+void Teacher::destroy(bool copy) 
+{
+	if (copy)
+		delete this->fullname;
+	else
+		this->~Teacher();
+}
 
 void TeacherDataBase::dump_obj(FILE* source, Teacher* obj)
 {
@@ -192,7 +199,7 @@ Teacher* TeacherDataBase::sorted_list()	//Checked
 }
 Teacher* TeacherDataBase::filter_by_status(int status, int* founded)	//Checked
 {
-
+	*founded = 0;
 	for (int i = 0; i < Teacher::get_count(); i++)
 		if (arr[i].status == status)
 			(*founded) += 1;
