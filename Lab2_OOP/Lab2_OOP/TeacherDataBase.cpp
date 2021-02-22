@@ -142,8 +142,12 @@ Teacher* TeacherDataBase::load_object(FILE* file)
 	int department = 0, status = 0;
 
 	fscanf_s(file, "%d\n%d\n", &department, &status);
+
+	char* name = read_str(file);
+	char* surname = read_str(file);
+	char* second_name = read_str(file);
 	
-	return new Teacher(read_str(file), read_str(file), read_str(file), department, status);
+	return new Teacher(name, surname, second_name, department, status);
 }
 void TeacherDataBase::download_db()	//May be memory bugs
 {
