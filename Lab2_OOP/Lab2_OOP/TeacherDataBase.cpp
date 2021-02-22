@@ -193,11 +193,23 @@ Teacher* TeacherDataBase::sorted_list()	//Checked
 
 	for (int i = 0; i < Teacher::get_count() - 1; i++)
 		for (int j = 0; j < Teacher::get_count() - i - 1; j++)
-			if ((strcmp(result[j].fullname->get_surname(), result[j + 1].fullname->get_surname()) > 0) |
-				(strcmp(result[j].fullname->get_name(), result[j + 1].fullname->get_name()) > 0) |
-				(strcmp(result[j].fullname->get_second_name(), result[j + 1].fullname->get_second_name()) > 0)
-				)
+		{
+			string full_name1, full_name2;
+			full_name1 += result[j].fullname->get_surname();
+			full_name1 += " ";
+			full_name1 += result[j].fullname->get_name();
+			full_name1 += " ";
+			full_name1 += result[j].fullname->get_second_name();
+
+			full_name2 += result[j + 1].fullname->get_surname();
+			full_name2 += " ";
+			full_name2 += result[j + 1].fullname->get_name();
+			full_name2 += " ";
+			full_name2 += result[j + 1].fullname->get_second_name();
+
+			if (strcmp(full_name1.c_str(), full_name2.c_str()) > 0)
 				result[j].swap(&result[j + 1]);
+		}
 
 	return result;
 }
