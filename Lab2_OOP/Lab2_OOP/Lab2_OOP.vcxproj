@@ -140,12 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FullName.h" />
-    <ClInclude Include="Teacher.h" />
+    <ClInclude Include="Func.h" />
+    <ClInclude Include="TeacherDataBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FullName.cpp" />
+    <ClCompile Include="Func.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Teacher.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="menu.h" />
+    <ClCompile Include="TeacherDataBase.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,24 +1,40 @@
 #include "FullName.h"
-#include "Teacher.h"
+#include "TeacherDataBase.h"
 #include <iostream>
+#include "Func.h"
+#include <fstream>
+#include <windows.h>
+#include "menu.h"
+
 
 int main() 
 {
-	char* name = new char[] {"name"};
-	char* surname = new char[] {"surname"};
-	char* second_name = new char[] {"second name"};
-
-	char* name1 = new char[] {"name1"};
-	char* surname1 = new char[] {"surname1"};
-	char* second_name1 = new char[] {"second name1"};
-
-	//FullName fn(name, surname, second_name);
-	//FullName fn1(fn);
+	//Configuring console
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	
-	Teacher t(name1, surname1, second_name1, 1, 1);
-	Teacher t1(t);
+	//Configuring app
+	string file_path = "db.bin";
 
-	int i = 1;
+	TeacherDataBase* db = new TeacherDataBase(file_path);
+	
+	list<string>* status_list = new list<string>();
+	list<string>* dep_list = new list<string>();
+
+	dep_list->push_back(string("иповс"));
+	dep_list->push_back(string("вм"));
+	dep_list->push_back(string("вт"));
+
+	status_list->push_back(string("преподаватель"));
+	status_list->push_back(string("доцент"));
+	status_list->push_back(string("доктор наук"));
+
+	Teacher::set_dep_list(dep_list);
+	Teacher::set_status_list(status_list);
+	//Starting app
+	start_menu(db);
+
+	delete db;
 
 	return 0;
 }

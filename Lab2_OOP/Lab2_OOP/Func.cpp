@@ -43,7 +43,7 @@ int get_word_from_list(list<string>* lst)
 
 	entered_word += str;
 
-	int counter = 1;
+	int counter = 0;
 	for (int i = 0; i < entered_word.length(); i++)
 		entered_word[i] = to_lower(entered_word[i]);
 
