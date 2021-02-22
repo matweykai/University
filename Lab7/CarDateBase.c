@@ -507,7 +507,7 @@ Car* get_object(FILE *file)
 {
     Car *result_object;
 
-    if (feof(file))
+    if (is_end(file))
         return NULL;
 
     result_object = malloc(sizeof(Car));
@@ -548,4 +548,14 @@ void save_database(FILE *file, Car* car_arr, int size)
     int i;
     for (i = 0; i < size; i++)
         save_object_state(file, car_arr[i]);
+}
+int is_end(FILE* file)
+{
+    long base = ftell(file);
+    fseek(file, 0, SEEK_END);
+    bool result = base == ftell(file);
+    rewind(file);
+    fseek(file, base, SEEK_SET);
+
+    return result;
 }
