@@ -20,7 +20,7 @@ void dump_db(string file_path, Teacher* arr, int size)
 }
 Teacher* load_object(FILE* file) 
 {
-	if (feof(file))
+	if (is_end(file))
 		return nullptr;
 
 	Teacher* result = new Teacher();

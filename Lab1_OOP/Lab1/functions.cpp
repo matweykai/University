@@ -2,7 +2,7 @@
 
 const int BUFFERSIZE = 25;
 
-Teacher* copy(Teacher* base, int size) 
+Teacher* copy(Teacher* base, int size)
 {
 	Teacher* result = new Teacher[size];
 	for (int i = 0; i < size; i++)	//Full copy of teacher's object
@@ -29,7 +29,7 @@ void del_teachers(Teacher* teachers, int size)
 		delete teachers[i].fio;
 	delete[] teachers;
 }
-Teacher* filter_by_status(Teacher* base, int size, int status, int* found) 
+Teacher* filter_by_status(Teacher* base, int size, int status, int* found)
 {
 	*found = 0;
 	for (int i = 0; i < size; i++)
@@ -39,7 +39,7 @@ Teacher* filter_by_status(Teacher* base, int size, int status, int* found)
 	Teacher* result = new Teacher[*found];
 	int counter = 0;
 
-	for(int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 		if (base[i].status == status)
 		{
 			//Full copy
@@ -56,7 +56,7 @@ Teacher* filter_by_status(Teacher* base, int size, int status, int* found)
 Teacher* sort(Teacher* base, int size)
 {
 	Teacher* result = copy(base, size);
-	for(int i = 0; i < size - 1; i++)
+	for (int i = 0; i < size - 1; i++)
 		for (int j = 0; j < size - i - 1; j++)
 			if (strcmp(result[j].fio, result[j + 1].fio) > 0)
 			{
@@ -92,6 +92,16 @@ char* read_str(FILE* source)
 	}
 
 	result[res_str_len - 1] = '\0';
+
+	return result;
+}
+bool is_end(FILE* file)
+{
+	long base = ftell(file);
+	fseek(file, 0, SEEK_END);
+	bool result = base == ftell(file);
+	rewind(file);
+	fseek(file, base, SEEK_SET);
 
 	return result;
 }

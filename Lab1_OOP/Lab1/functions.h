@@ -12,3 +12,4 @@ Teacher* sort(Teacher*, int);
 Teacher* copy(Teacher*, int);
 void del_teachers(Teacher*, int);
 char* read_str(FILE*);
+bool is_end(FILE* file);
