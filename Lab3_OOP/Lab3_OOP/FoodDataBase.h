@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum class FoodType {};
+enum class FoodType { Muffin, Pie, Cake };
 
 class Food
 {
@@ -58,7 +58,6 @@ public:
 	vector<string>* get_types();
 	Food* get_food_arr();
 	void add_record(double price, FoodType type, double weight, int count, Date* produce_date, string* name);
-	Food* copy_arr();
 
 	~FoodDataBase();
 };

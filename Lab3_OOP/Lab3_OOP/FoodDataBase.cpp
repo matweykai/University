@@ -12,18 +12,6 @@ FoodDataBase::FoodDataBase(string path, vector<string>* types)
 
 vector<string>* FoodDataBase::get_types() { return FoodDataBase::types; }
 Food* FoodDataBase::get_food_arr() { return arr; }
-Food* FoodDataBase::copy_arr()
-{
-	if (!Food::foodCount)
-		return nullptr;
-
-	Food* result = new Food[Food::foodCount];
-
-	for (int i = 0; i < Food::foodCount; i++)
-		result[i] = arr[i];
-
-	return result;
-}
 void FoodDataBase::add_record(double price, FoodType type, double weight, int count, Date* produce_date, string* name)
 {
 	if (produce_date != nullptr && name != nullptr)
