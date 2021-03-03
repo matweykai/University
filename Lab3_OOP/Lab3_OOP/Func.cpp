@@ -77,7 +77,7 @@ Food* filter_by_date(Food* arr, Date date, int* found)
 
 	return result;
 }
-void show_table(Food* arr, list<string>* types, int size)
+void show_table(Food* arr, vector<string>* types, int size)
 {
 	int name = max_size(arr, size) + 2, type_size = 10, weight_size = 10, count_size = 10, price_size = 10, date_size = 14;
 
@@ -107,7 +107,7 @@ void show_table(Food* arr, list<string>* types, int size)
 		delete t_name;
 		
 		cout.width(type_size);
-		list<string>::iterator iter = types->begin();
+		vector<string>::iterator iter = types->begin();
 
 		for (int j = 0; j < (int)arr[i].get_type(); j++)
 			iter++;
