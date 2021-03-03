@@ -273,7 +273,7 @@ void Menu::startMenu()
 }
 ostream& operator <<(ostream& os, const Food& right)
 {
-	cout << right.name << (int)right.type << right.weight << right.count << right.price << right.produceDate->get_day << right.produceDate->get_month() << right.produceDate->get_year();
+	cout << right.name << (int)right.type << right.weight << right.count << right.price << right.produceDate->get_day()<< right.produceDate->get_month() << right.produceDate->get_year();
 	
 	return os;
 }
