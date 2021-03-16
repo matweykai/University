@@ -35,6 +35,7 @@ public:
 	static int get_food_count();
 	void virtual destroy(bool copy = false);
 	void virtual print(vector<string>* types, int name_size, int type_size = 10, int weight_size = 10, int count_size = 10, int date_size = 14, int price_size = 10);
+	void virtual dump_obj(ofstream* stream);
 	~Food();
 	
 	bool operator ==(Food obj);
@@ -60,6 +61,7 @@ public:
 
 	void print(vector<string>* types, int name_size, int type_size = 10, int weight_size = 10, int count_size = 10, int date_size = 14, int price_size = 10) override;
 	void destroy(bool copy = false) override;
+	void dump_obj(ofstream* stream) override;
 
 	~FoodExtra();
 };
@@ -72,7 +74,7 @@ class FoodDataBase
 
 	Food* get_obj(ifstream* stream);
 	void download_db();
-	void dump_obj(Food obj, ofstream* stream);
+	//void dump_obj(Food obj, ofstream* stream);
 	void dump_db();
 	bool is_end(ifstream* stream);
 

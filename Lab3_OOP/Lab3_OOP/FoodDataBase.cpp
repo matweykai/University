@@ -65,7 +65,9 @@ Food* FoodDataBase::get_obj(ifstream* stream)
 		{
 			double price = 0, weight = 0;
 			int  type = 0, count = 0, day = 0, month = 0, year = 0;
-			string name;
+			string text;
+
+			Food* result = nullptr;
 
 			*stream >> price;
 			*stream >> weight;
@@ -75,9 +77,25 @@ Food* FoodDataBase::get_obj(ifstream* stream)
 			*stream >> month;
 			*stream >> year;
 			stream->ignore();
-			getline(*stream, name);
+			getline(*stream, text);
+			try
+			{
+				int sale_day = stoi(text);
+				int sale_month = 0, sale_year = 0;
 
-			return new Food(price, FoodType(type), weight, count, new Date(day, month, year), new string(name));
+				*stream >> sale_month;
+				*stream >> sale_year;
+				stream->ignore();
+				getline(*stream, text);
+
+				result = new FoodExtra(price, FoodType(type), weight, count, new Date(day, month, year), new string(text), new Date(sale_day, sale_month, sale_year));
+			}
+			catch (invalid_argument)
+			{
+				result = new Food(price, FoodType(type), weight, count, new Date(day, month, year), new string(text));
+			}
+
+			return result;
 		}
 		else
 			return nullptr;
@@ -92,22 +110,8 @@ void FoodDataBase::dump_db()
 	if (str.is_open())
 	{
 		for (int i = 0; i < Food::foodCount; i++)
-			dump_obj(arr[i], &str);
+			arr[i].dump_obj(&str);
 		str.close();
-	}
-}
-void FoodDataBase::dump_obj(Food obj, ofstream* stream)
-{
-	if (stream != nullptr)
-	{
-		*stream << obj.price << endl;
-		*stream << obj.weight << endl;
-		*stream << (int)obj.type << endl;
-		*stream << obj.count << endl;
-		*stream << obj.produceDate->get_day() << endl;
-		*stream << obj.produceDate->get_month() << endl;
-		*stream << obj.produceDate->get_year() << endl;
-		*stream << *obj.name << endl;
 	}
 }
 bool FoodDataBase::is_end(ifstream* stream) 
@@ -121,6 +125,7 @@ bool FoodDataBase::is_end(ifstream* stream)
 
 	return result;
 }
+
 FoodDataBase::~FoodDataBase() 
 {
 	dump_db();

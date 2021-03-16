@@ -72,6 +72,20 @@ void Food::print(vector<string>* types, int name_size, int type_size, int weight
 	Date* t_date = produceDate;
 	cout << to_string(t_date->get_day()) + "." + to_string(t_date->get_month()) + "." + to_string(t_date->get_year());
 }
+void Food::dump_obj(ofstream* stream)
+{
+	if (stream != nullptr)
+	{
+		*stream << price << endl;
+		*stream << weight << endl;
+		*stream << (int)type << endl;
+		*stream << count << endl;
+		*stream << produceDate->get_day() << endl;
+		*stream << produceDate->get_month() << endl;
+		*stream << produceDate->get_year() << endl;
+		*stream << *name << endl;
+	}
+}
 
 bool Food::operator==(Food obj) 
 {
