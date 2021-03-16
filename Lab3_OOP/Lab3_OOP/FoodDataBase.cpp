@@ -11,18 +11,22 @@ FoodDataBase::FoodDataBase(string path, vector<string>* types)
 }
 
 vector<string>* FoodDataBase::get_types() { return FoodDataBase::types; }
-Food* FoodDataBase::get_food_arr() { return arr; }
-void FoodDataBase::add_record(double price, FoodType type, double weight, int count, Date* produce_date, string* name)
+Food** FoodDataBase::get_food_arr() { return arr; }
+void FoodDataBase::add_record(double price, FoodType type, double weight, int count, Date* produce_date, string* name, Date* sale_date)
 {
 	if (produce_date != nullptr && name != nullptr)
 	{
-		Food* result = new Food[Food::foodCount + 1];
+		Food** result = new Food*[Food::foodCount + 1];
 		
 		for (int i = 0; i < Food::foodCount; i++)
 			result[i] = arr[i];
 
-		result[Food::foodCount - 1] = Food(price, type, weight, count, produce_date, name);
-		if(arr != nullptr)
+		if (sale_date != nullptr)
+			result[Food::foodCount - 1] = new FoodExtra(price, type, weight, count, produce_date, name, sale_date);
+		else
+			result[Food::foodCount - 1] = new Food(price, type, weight, count, produce_date, name);
+
+		if(arr != nullptr)	//May be here you should delete one object
 			delete[] arr;
 
 		arr = result;
@@ -44,14 +48,13 @@ void FoodDataBase::download_db()
 				break;
 
 			int size = Food::foodCount;
-			Food* result = new Food[size];
+			Food** result = new Food*[size];
 			for (int i = 0; i < size - 1; i++)
 				result[i] = arr[i];
-			result[size - 1] = *t_obj;
+			result[size - 1] = t_obj;
 			
 			if (arr != nullptr)
 				delete[] arr;
-			delete t_obj;
 
 			arr = result;
 		}
@@ -110,7 +113,7 @@ void FoodDataBase::dump_db()
 	if (str.is_open())
 	{
 		for (int i = 0; i < Food::foodCount; i++)
-			arr[i].dump_obj(&str);
+			arr[i]->dump_obj(&str);
 		str.close();
 	}
 }
@@ -132,5 +135,5 @@ FoodDataBase::~FoodDataBase()
 
 	int size = Food::foodCount;
 	for (int i = 0; i < size; i++)
-		arr[i].destroy();
+		arr[i]->destroy();
 }

@@ -34,22 +34,19 @@ void Menu::findByName()
 	if (t_food == nullptr)
 		cout << "Товар не найден";
 	else
-		show_table(t_food, types, 1);
+		show_table(&t_food, types, 1);
 
-	if (t_food != nullptr)
-		delete t_food;
 	delete t_name;
 }
 void Menu::showSortedArr() 
 {
-	Food* t_arr = sort_by_price(db->get_food_arr());
+	Food** t_arr = sort_by_price(db->get_food_arr());
 
 	cout << "Упорядоченный по цене список: \n\n";
 	show_table(t_arr, types);
 
-	if (t_arr != nullptr)
-		for (int i = 0; i < Food::get_food_count(); i++)
-			t_arr[i].destroy(true);
+	if (t_arr != nullptr)	// May be problems with deleting main arr
+		delete[] t_arr;
 }
 void Menu::findByDate() 
 {
@@ -57,12 +54,11 @@ void Menu::findByDate()
 	Date t_date = enterDate();
 	
 	int found = 0;
-	Food* t_arr = filter_by_date(db->get_food_arr(), t_date, &found);
+	Food** t_arr = filter_by_date(db->get_food_arr(), t_date, &found);
 	show_table(t_arr, types, found);
 
-	if (found != 0)
-		for(int i = 0; i < found; i++)
-			t_arr[i].destroy();
+	if (found != 0)	// May be problems with deleting main arr
+		delete[] t_arr;
 }
 Date Menu::enterDate() 
 {

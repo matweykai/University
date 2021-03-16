@@ -63,13 +63,15 @@ public:
 	void destroy(bool copy = false) override;
 	void dump_obj(ofstream* stream) override;
 
+	FoodExtra& operator =(const FoodExtra& obj);
+
 	~FoodExtra();
 };
 
 class FoodDataBase 
 {
 	static vector<string>* types;
-	Food* arr;
+	Food** arr;
 	string path;
 
 	Food* get_obj(ifstream* stream);
@@ -82,8 +84,8 @@ public:
 	FoodDataBase(string path, vector<string>* types);
 
 	vector<string>* get_types();
-	Food* get_food_arr();
-	void add_record(double price, FoodType type, double weight, int count, Date* produce_date, string* name);
+	Food** get_food_arr();
+	void add_record(double price, FoodType type, double weight, int count, Date* produce_date, string* name, Date* sale_date = nullptr);
 
 	~FoodDataBase();
 };

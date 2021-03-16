@@ -31,6 +31,18 @@ void FoodExtra::dump_obj(ofstream* stream)
 		*stream << *name << endl;
 	}
 }
+FoodExtra& FoodExtra::operator =(const FoodExtra& obj)
+{
+	this->price = obj.price;
+	this->type = obj.type;
+	this->weight = obj.weight;
+	this->count = obj.count;
+	this->produceDate = new Date(*obj.produceDate);
+	this->name = new string(*obj.name);
+	this->saleDate = new Date(*obj.saleDate);
+
+	return *this;
+}
 
 FoodExtra::~FoodExtra() 
 {
