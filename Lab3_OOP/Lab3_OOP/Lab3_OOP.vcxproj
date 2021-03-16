@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Food.cpp" />
+    <ClCompile Include="FoodExtra.cpp" />
     <ClCompile Include="Func.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FoodDataBase.cpp" />

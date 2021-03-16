@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -10,6 +11,8 @@ enum class FoodType { Muffin, Pie, Cake };
 
 class Food
 {
+protected:
+
 	static int foodCount;
 	
 	double price;
@@ -30,7 +33,8 @@ public:
 	Date* get_date();
 	string* get_name();
 	static int get_food_count();
-	void destroy(bool copy = false);
+	void virtual destroy(bool copy = false);
+	void virtual print(vector<string>* types, int name_size, int type_size = 10, int weight_size = 10, int count_size = 10, int date_size = 14, int price_size = 10);
 	~Food();
 	
 	bool operator ==(Food obj);
@@ -38,6 +42,26 @@ public:
 	friend ostream & operator <<(ostream & os, const Food & right);
 
 	friend class FoodDataBase;
+};
+
+class FoodExtra : public Food 
+{
+	Date* saleDate;
+
+public:
+	FoodExtra(double price = 0, FoodType type = FoodType(0), double weight = 0, int count = 0, Date* produce_date = nullptr, string* name = nullptr, Date* sale_date = nullptr) : Food(price, type, weight, count, produce_date, name)
+	{
+		this->saleDate = sale_date;
+	}
+	FoodExtra(const FoodExtra& obj) : Food(obj)
+	{
+		this->saleDate = new Date(*obj.saleDate);
+	}
+
+	void print(vector<string>* types, int name_size, int type_size = 10, int weight_size = 10, int count_size = 10, int date_size = 14, int price_size = 10) override;
+	void destroy(bool copy = false) override;
+
+	~FoodExtra();
 };
 
 class FoodDataBase 

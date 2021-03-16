@@ -47,6 +47,31 @@ Food::~Food()
 	if (name != nullptr)
 		delete name;
 }
+void Food::print(vector<string>* types, int name_size, int type_size, int weight_size, int count_size, int date_size, int price_size)
+{
+	cout.width(name_size);
+	cout << *name;
+
+	cout.width(type_size);
+	vector<string>::iterator iter = types->begin();
+
+	for (int j = 0; j < (int)type; j++)
+		iter++;
+	cout << *iter;
+
+	cout.width(weight_size);
+	cout << weight;
+
+	cout.width(count_size);
+	cout << count;
+
+	cout.width(price_size);
+	cout << price;
+
+	cout.width(date_size);
+	Date* t_date = produceDate;
+	cout << to_string(t_date->get_day()) + "." + to_string(t_date->get_month()) + "." + to_string(t_date->get_year());
+}
 
 bool Food::operator==(Food obj) 
 {
