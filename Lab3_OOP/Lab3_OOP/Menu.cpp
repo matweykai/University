@@ -28,7 +28,7 @@ void Menu::findByName()
 	
 	cout << "Поиск по названию\n";
 	cout << "Введите название товара: ";
-	cin >> *t_name;
+	getline(cin, *t_name);
 
 	Food* t_food = find_by_name(db->get_food_arr(), t_name);
 	if (t_food == nullptr)
@@ -119,7 +119,7 @@ void Menu::addRecord()
 	cout << endl;
 
 	cout << "Введите название: ";
-	cin >> name;
+	getline(cin, name);
 
 	while (true)
 	{
@@ -199,7 +199,22 @@ void Menu::addRecord()
 	cout << "Дата производства" << endl;
 	produceDate = enterDate();
 
-	db->add_record(*price, FoodType(*type_n - 1), *weight, *count, new Date(produceDate), new string(name));
+	cout << "Ввести дату продажи?(Y/N)";
+	char pr_but = _getch();
+	if (pr_but == 'Y' || pr_but == 'y' || pr_but == 'н' || pr_but == 'Н')
+	{
+		cout << endl;
+		cout << "Дата продажи" << endl;
+		Date sale_date = enterDate();
+		while (sale_date < produceDate)
+		{
+			cout << "Данные о продаже неверные" << endl;
+			sale_date = enterDate();
+		}
+		db->add_record(*price, FoodType(*type_n - 1), *weight, *count, new Date(produceDate), new string(name), new Date(sale_date));
+	}
+	else
+		db->add_record(*price, FoodType(*type_n - 1), *weight, *count, new Date(produceDate), new string(name));
 
 	delete weight, price, count, type_n;
 

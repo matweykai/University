@@ -26,7 +26,7 @@ void FoodDataBase::add_record(double price, FoodType type, double weight, int co
 		else
 			result[Food::foodCount - 1] = new Food(price, type, weight, count, produce_date, name);
 
-		if(arr != nullptr)	//May be here you should delete one object
+		if(arr != nullptr)
 			delete[] arr;
 
 		arr = result;

@@ -41,7 +41,7 @@ Food* find_by_name(Food** arr, string* name)
 		if (*t_name == *name)
 		{
 			delete t_name;
-			return new Food(*arr[i]);
+			return arr[i];
 		}
 		delete t_name;
 	}
