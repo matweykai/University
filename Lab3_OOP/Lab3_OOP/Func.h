@@ -10,3 +10,5 @@ Food** filter_by_date(Food** arr, Date date, int* found);
 void show_table(Food** arr, vector<string>* types, int size = Food::get_food_count());
 int max_size(Food** arr, int size = Food::get_food_count());
 void print_line(int size, int adding_count = 0);
+Date get_current_date();
+Food** find_spoiled_food(Food** arr, unsigned int hours, int* found);

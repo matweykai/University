@@ -1,9 +1,9 @@
 #pragma once
 
-#include <iostream>
-#include <conio.h>
 #include "Func.h"
 #include "EnterException.h"
+#include <iostream>
+#include <conio.h>
 
 using namespace std;
 
@@ -15,6 +15,7 @@ class Menu
 	void showAll();
 	void showSortedArr();
 	void findByDate();
+	void findSpoiledFood();
 	void addRecord(istream& str);
 	Date enterDate();
 

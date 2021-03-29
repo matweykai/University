@@ -130,3 +130,40 @@ void print_line(int size, int adding_count)
 	for (int i = 0; i < size + adding_count; i++)
 		cout << "-";
 }
+Date get_current_date() 
+{
+	time_t now = time(0);
+
+	tm* temp = new tm; 
+	localtime_s(temp, &now);
+
+	return Date(temp->tm_mday, temp->tm_mon + 1, 1900 + temp->tm_year);
+}
+Food** find_spoiled_food(Food** arr, unsigned int hours, int* found)
+{
+	Food** result = nullptr;
+	Date today = get_current_date();
+	int spoiled_num = today.get_year() * 365 + today.get_month() * 31 + today.get_day() - hours / 24;
+
+	for (int i = 0; i < Food::get_food_count(); i++)
+	{
+		Date* temp_date = arr[i]->get_date();
+		if (temp_date == nullptr)
+			throw invalid_argument("Date is null");
+		if (temp_date->get_day() + temp_date->get_month() * 31 + temp_date->get_year() * 365 < spoiled_num)
+			*found += 1;
+	}
+	if (*found != 0)
+	{
+		result = new Food * [*found];
+		int counter = 0;
+		for (int i = 0; i < Food::get_food_count(); i++)
+		{
+			Date* temp_date = arr[i]->get_date();
+			if (temp_date->get_day() + temp_date->get_month() * 31 + temp_date->get_year() * 365 < spoiled_num)
+				result[counter++] = arr[i];
+		}
+	}
+
+	return result;
+}

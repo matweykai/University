@@ -1,5 +1,7 @@
 ﻿#include "Menu.h"
 
+//using namespace std;
+
 Menu::Menu()
 {
 	types = new vector<string>();
@@ -242,6 +244,30 @@ void Menu::addRecord(istream& str)
 
 	delete weight, price, count, type_n;
 }
+void Menu::findSpoiledFood() 
+{
+	int found = 0;
+	unsigned int* hours = nullptr;
+
+	while (true)
+	{
+		cout << "Введите кол-во часов через которое испортятся продукты: ";
+		try 
+		{
+			hours = enter_num<unsigned int>();
+			break;
+		}
+		catch (EnterException ex)
+		{
+			cout << ex.get_msg() << endl;
+		}
+	}
+
+	Food** arr = find_spoiled_food(db->get_food_arr(), *hours, &found);
+	show_table(arr, types, found);
+
+	delete[] arr;
+}
 template<class T>
 T* enter_num() 
 {
@@ -275,7 +301,8 @@ void Menu::startMenu()
 		cout << "3 - Найти товар по его названию" << endl;
 		cout << "4 - Найти товары по дате" << endl;
 		cout << "5 - Вывести упорядоченные записи" << endl;
-		cout << "6 - Выйти" << endl;
+		cout << "6 - Найти просроченные товары" << endl;
+		cout << "7 - Выход" << endl;
 
 		pressed_button = _getch();
 		system("cls");
@@ -297,6 +324,9 @@ void Menu::startMenu()
 			showSortedArr();
 			break;
 		case '6':
+			findSpoiledFood();
+			break;
+		case '7':
 			return;
 			break;
 		}
