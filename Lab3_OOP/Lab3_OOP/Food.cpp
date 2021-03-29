@@ -104,7 +104,11 @@ Food& Food::operator =(const Food& obj)
 	this->type = obj.type;
 	this->weight = obj.weight;
 	this->count = obj.count;
+	if (produceDate != nullptr)
+		delete produceDate;
 	this->produceDate = new Date(*obj.produceDate);
+	if (name != nullptr)
+		delete name;
 	this->name = new string(*obj.name);
 
 	return *this;

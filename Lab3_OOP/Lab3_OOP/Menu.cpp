@@ -67,28 +67,44 @@ Date Menu::enterDate()
 	
 	while (true)
 	{
-		cout << "Введите день: ";
-		day = enter_num<int>();
-		while(day == nullptr)
+		try
 		{
-			cout << "Число введено неправильно" << endl;
-			day = enter_num<int>();
+			while (true)
+			{
+				cout << "Введите день: ";
+				day = enter_num<int>();
+				break;
+			}
 		}
-
-		cout << "Введите месяц: ";
-		month = enter_num<int>();
-		while (month == nullptr)
+		catch (EnterException ex) 
 		{
-			cout << "Число введено неправильно" << endl;
-			month = enter_num<int>();
+			cout << ex.get_msg() << endl;
 		}
-
-		cout << "Введите год: ";
-		year = enter_num<int>();
-		while (year == nullptr)
+		try
 		{
-			cout << "Число введено неправильно" << endl;
-			year = enter_num<int>();
+			while (true)
+			{
+				cout << "Введите месяц: ";
+				month = enter_num<int>();
+				break;
+			}
+		}
+		catch (EnterException ex) 
+		{
+			cout << ex.get_msg() << endl;
+		}
+		try
+		{
+			while (true)
+			{
+				cout << "Введите год: ";
+				year = enter_num<int>();
+				break;
+			}
+		}
+		catch (EnterException ex) 
+		{
+			cout << ex.get_msg() << endl;
 		}
 
 		try
@@ -107,7 +123,7 @@ Date Menu::enterDate()
 
 	return result;
 }
-void Menu::addRecord() 
+void Menu::addRecord(istream& str) 
 {
 	string name;
 	double* weight = nullptr, *price = nullptr;
@@ -119,60 +135,66 @@ void Menu::addRecord()
 	cout << endl;
 
 	cout << "Введите название: ";
-	getline(cin, name);
+	getline(str, name);
 
 	while (true)
 	{
-		cout << "Введите вес: ";
-		weight = enter_num<double>();
-		if (weight == nullptr)
+		try
 		{
-			cout << "Ошибка ввода числа" << endl;
-			continue;
-		}
+			cout << "Введите вес: ";
+			weight = enter_num<double>();
 
-		if (*weight < 0)
-		{
-			cout << "Вес не может быть отрицательным" << endl;
-			continue;
+			if (*weight < 0)
+			{
+				cout << "Вес не может быть отрицательным" << endl;
+				continue;
+			}
+			break;
 		}
-		break;
+		catch (EnterException ex) 
+		{
+			cout << ex.get_msg() << endl;
+		}
 	}
 
 	while (true)
 	{
-		cout << "Введите цену: ";
-		price = enter_num<double>();
-		if (price == nullptr)
+		try
 		{
-			cout << "Ошибка ввода числа" << endl;
-			continue;
-		}
+			cout << "Введите цену: ";
+			price = enter_num<double>();
 
-		if (*price < 0)
-		{
-			cout << "Цена не может быть отрицательной" << endl;
-			continue;
+			if (*price < 0)
+			{
+				cout << "Цена не может быть отрицательной" << endl;
+				continue;
+			}
+			break;
 		}
-		break;
+		catch (EnterException ex) 
+		{
+			cout << ex.get_msg() << endl;
+		}
 	}
 
 	while (true)
 	{
-		cout << "Введите кол-во товара: ";
-		count = enter_num<int>();
-		if (count == nullptr)
+		try
 		{
-			cout << "Ошибка ввода числа" << endl;
-			continue;
-		}
+			cout << "Введите кол-во товара: ";
+			count = enter_num<int>();
 
-		if (*count < 0)
-		{
-			cout << "Кол-во не может быть отрицательным" << endl;
-			continue;
+			if (*count < 0)
+			{
+				cout << "Кол-во не может быть отрицательным" << endl;
+				continue;
+			}
+			break;
 		}
-		break;
+		catch (EnterException ex)
+		{
+			cout << ex.get_msg() << endl;
+		}
 	}
 
 	cout << "Типы товара" << endl;
@@ -180,21 +202,23 @@ void Menu::addRecord()
 	for (vector<string>::iterator iter = types->begin(); iter != types->end(); iter++)
 		cout << ++counter << " - " << *iter << endl;
 
-	while (true) 
+	while (true)
 	{
-		cout << "Введите тип товара: ";
-		type_n = enter_num<int>();
-		if (type_n == nullptr)
+		try
 		{
-			cout << "Ошибка ввода числа" << endl;
-			continue;
+			cout << "Введите тип товара: ";
+			type_n = enter_num<int>();
+			if (*type_n < 1 || *type_n > counter)
+			{
+				cout << "Неправильный тип товара" << endl;
+				continue;
+			}
+			break;
 		}
-		if (*type_n < 1 || *type_n > counter)
+		catch (EnterException ex)
 		{
-			cout << "Неправильный тип товара" << endl;
-			continue;
+			cout << ex.get_msg() << endl;
 		}
-		break;
 	}
 	cout << "Дата производства" << endl;
 	produceDate = enterDate();
@@ -217,7 +241,6 @@ void Menu::addRecord()
 		db->add_record(*price, FoodType(*type_n - 1), *weight, *count, new Date(produceDate), new string(name));
 
 	delete weight, price, count, type_n;
-
 }
 template<class T>
 T* enter_num() 
@@ -231,10 +254,11 @@ T* enter_num()
 	{
 		cin.clear();
 		delete temp;
-		temp = nullptr;
+		throw EnterException("Неправильный ввод числа!!");
 	}
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 	return temp;
 }
 void Menu::startMenu() 
@@ -261,7 +285,7 @@ void Menu::startMenu()
 			showAll();
 			break;
 		case '2':
-			addRecord();
+			cin >> this;	//Adding new object
 			break;
 		case '3':
 			findByName();
@@ -287,4 +311,9 @@ ostream& operator <<(ostream& os, const Food& right)
 	cout << right.name << (int)right.type << right.weight << right.count << right.price << right.produceDate->get_day()<< right.produceDate->get_month() << right.produceDate->get_year();
 	
 	return os;
+}
+istream& operator >>(istream& str, Menu* menu) 
+{
+	menu->addRecord(str);
+	return str;
 }

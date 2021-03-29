@@ -3,6 +3,7 @@
 #include <iostream>
 #include <conio.h>
 #include "Func.h"
+#include "EnterException.h"
 
 using namespace std;
 
@@ -14,12 +15,14 @@ class Menu
 	void showAll();
 	void showSortedArr();
 	void findByDate();
-	void addRecord();
+	void addRecord(istream& str);
 	Date enterDate();
 
 public:
 	Menu();
 	void startMenu();
+
+	friend istream& operator >>(istream& str, Menu* menu);
 	~Menu();
 };
 template<class T>
