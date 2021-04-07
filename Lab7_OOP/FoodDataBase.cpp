@@ -18,7 +18,7 @@ void FoodDataBase::add_record(double price, Date* produce_date, string* name, bo
 
 void FoodDataBase::download_db()
 {
-	/*ifstream stream;
+	ifstream stream;
 	stream.open(path);
 
 	if (stream.is_open())
@@ -30,19 +30,11 @@ void FoodDataBase::download_db()
 			if (t_obj == nullptr)
 				break;
 
-			int size = Food::get_food_count();
-			Food** result = new Food * [size];
-			for (int i = 0; i < size - 1; i++)
-				result[i] = arr[i];
-			result[size - 1] = t_obj;
-
-			if (arr != nullptr)
-				delete[] arr;
-
-			arr = result;
+			arr.push_back(*t_obj);
+			delete t_obj;	//May be problems
 		}
 		stream.close();
-	}*/
+	}
 }
 Food* FoodDataBase::get_obj(ifstream* stream)
 {
@@ -108,7 +100,8 @@ FoodDataBase::~FoodDataBase()
 
 void FoodDataBase::delete_record(int index) 
 {
-	if (index > arr.size() - 1 || index < 0)
+	int size = arr.size();
+	if (index > size - 1 || index < 0)
 		throw invalid_argument("Такого индекса не существует");
 	
 	deque<Food>::iterator iter = arr.begin();
