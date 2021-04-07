@@ -7,10 +7,13 @@ FoodDataBase::FoodDataBase(string path)
 }
 
 deque<Food> FoodDataBase::get_food_arr() { return arr; }
-void FoodDataBase::add_record(double price, Date* produce_date, string* name)
+void FoodDataBase::add_record(double price, Date* produce_date, string* name, bool before)
 {
 	if (produce_date != nullptr && name != nullptr)
-		arr.push_back(Food(price, produce_date, name));
+		if(!before)
+			arr.push_back(Food(price, produce_date, name));
+		else
+			arr.push_front(Food(price, produce_date, name));
 }
 
 void FoodDataBase::download_db()
@@ -97,5 +100,21 @@ FoodDataBase::~FoodDataBase()
 
 	int size = Food::get_food_count();
 	for (int i = 0; i < size; i++)
-		arr[i].destroy();
+	{
+		arr[0].destroy();
+		arr.pop_front();
+	}
+}
+
+void FoodDataBase::delete_record(int index) 
+{
+	if (index > arr.size() - 1 || index < 0)
+		throw invalid_argument("Такого индекса не существует");
+	
+	deque<Food>::iterator iter = arr.begin();
+	for (int i = 0; i < index; i++)
+		iter++;
+
+	arr[index].destroy();
+	arr.erase(iter);
 }

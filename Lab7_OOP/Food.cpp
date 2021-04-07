@@ -22,11 +22,7 @@ Food::Food(double price, Date* produce_date, string* name)
 Food::Food(const Food& obj)
 {
 	this->price = obj.price;
-	if (produceDate != nullptr)
-		delete produceDate;
 	this->produceDate = new Date(*obj.produceDate);
-	if (name != nullptr)
-		delete name;
 	this->name = new string(*obj.name);
 }
 
@@ -46,6 +42,9 @@ Food::~Food()
 		delete produceDate;
 	if (name != nullptr)
 		delete name;
+
+	produceDate = nullptr;
+	name = nullptr;
 }
 void Food::dump_obj(ofstream* stream)
 {
@@ -80,12 +79,13 @@ Food& Food::operator =(const Food& obj)
 ostream& operator <<(ostream& os, const Food& right) 
 {
 	os.width(Food::maxLen);
-	os << right.name;
+	os << *right.name;
 
 	os.width(PRICE_S);
 	os << right.price;
 
 	os.width(DATE_S);
 	os << to_string(right.produceDate->get_day()) + "." + to_string(right.produceDate->get_month()) + "." + to_string(right.produceDate->get_year());
-	os << endl;
+
+	return os;
 }

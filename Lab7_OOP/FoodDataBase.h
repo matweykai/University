@@ -51,7 +51,8 @@ class FoodDataBase
 public:
 	FoodDataBase(string path);
 	deque<Food> get_food_arr();
-	void add_record(double price, Date* produce_date, string* name);
+	void add_record(double price, Date* produce_date, string* name, bool before = false);
+	void delete_record(int index = 0);
 
 	~FoodDataBase();
 };
