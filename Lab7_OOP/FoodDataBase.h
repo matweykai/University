@@ -9,6 +9,7 @@
 
 #define PRICE_S 5
 #define DATE_S 12
+#define NAME_SPACE 5
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
 	static int get_food_count();
 	void destroy(bool copy = false);
 	void dump_obj(ofstream* stream);
+	static int get_maxLen();
 	~Food();
 
 	bool operator ==(Food obj);

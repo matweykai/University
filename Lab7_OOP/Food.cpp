@@ -78,7 +78,7 @@ Food& Food::operator =(const Food& obj)
 }
 ostream& operator <<(ostream& os, const Food& right) 
 {
-	os.width(Food::maxLen);
+	os.width(Food::maxLen + NAME_SPACE);
 	os << *right.name;
 
 	os.width(PRICE_S);
@@ -89,3 +89,4 @@ ostream& operator <<(ostream& os, const Food& right)
 
 	return os;
 }
+int Food::get_maxLen() { return maxLen; }
