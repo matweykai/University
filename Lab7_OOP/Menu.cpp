@@ -124,7 +124,13 @@ void Menu::addRecord(istream& str)
 	cout << "Дата производства" << endl;
 	produceDate = enterDate();
 
-	db->add_record(*price, new Date(produceDate), new string(name));
+	cout << "Добавить запись в начало? (Y)" << endl;
+	bool before = false;
+	char pr_but = _getch();
+	if (pr_but == 'Y' || pr_but == 'y' || pr_but == 'н' || pr_but == 'Н')
+		before = true;
+
+	db->add_record(*price, new Date(produceDate), new string(name), before);
 
 	delete price;
 }
@@ -141,7 +147,8 @@ void Menu::startMenu()
 		cout << "2 - Добавить запись" << endl;
 		cout << "3 - Найти товары по дате" << endl;
 		cout << "4 - Вывести упорядоченные записи" << endl;
-		cout << "5 - Выход" << endl;
+		cout << "5 - Удалить первую запись" << endl;
+		cout << "6 - Выход" << endl;
 
 		pressed_button = _getch();
 		system("cls");
@@ -160,6 +167,9 @@ void Menu::startMenu()
 			showSortedArr();
 			break;
 		case '5':
+			deleteRecord();
+			break;
+		case '6':
 			return;
 			break;
 		}
@@ -168,6 +178,21 @@ void Menu::startMenu()
 		_getch();
 		system("cls");
 	}
+}
+void Menu::deleteRecord()
+{
+	cout << "Удалить запись?(Y)" << endl;
+	char pr_but = _getch();
+	if (pr_but == 'Y' || pr_but == 'y' || pr_but == 'н' || pr_but == 'Н')
+		try
+		{
+			db->delete_record();
+			cout << "Запись удалена" << endl;
+		}
+		catch (invalid_argument ex)
+		{
+			cout << "Нечего удалять!";
+		}
 }
 Menu::~Menu() 
 {

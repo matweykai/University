@@ -15,6 +15,7 @@ class Menu
 	void findByDate();
 	void addRecord(istream& str);
 	Date enterDate();
+	void deleteRecord();
 
 public:
 	Menu(string fileName);
