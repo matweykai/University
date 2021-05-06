@@ -8,7 +8,5 @@ class Item
 protected:
 	unsigned int maxSize;
 	string name;
-
-
 };
 

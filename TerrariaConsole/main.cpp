@@ -1,7 +1,11 @@
-#include <iostream>
+#include "Engine.h"
+
 
 int main()
 {
-	std::cout << "Hello, world!" << std::endl;
+	Engine en;
+	en.start_game();
+
+	return 0;
 }
 

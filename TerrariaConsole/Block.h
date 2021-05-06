@@ -5,8 +5,11 @@
 class Block : Item
 {
 	Coordinates coordinates;
-	int color;
-
+	short color;
+public:
+	Block(unsigned int x, unsigned int y, short color);
+	Coordinates* get_coordinates();
+	short get_color();
 };
 
 
