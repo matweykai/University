@@ -1,15 +1,18 @@
 #pragma once
 #include "Coordinates.h"
 #include "Item.h"
+#include <SFML/Graphics.hpp>
+
+using namespace sf;
 
 class Block : Item
 {
 	Coordinates coordinates;
-	short color;
+	Color color;
 public:
-	Block(unsigned int x, unsigned int y, short color);
+	Block(unsigned int x, unsigned int y, Color color);
 	Coordinates* get_coordinates();
-	short get_color();
+	Color get_color();
 };
 
 

@@ -4,11 +4,11 @@ Coordinates* Block::get_coordinates()
 {
 	return &coordinates;
 }
-short Block::get_color() 
+Color Block::get_color() 
 {
 	return color;
 }
-Block::Block(unsigned int x, unsigned int y, short color)
+Block::Block(unsigned int x, unsigned int y, Color color)
 {
 	this->coordinates = Coordinates(x, y);
 	this->color = color;
