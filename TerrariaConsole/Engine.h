@@ -9,6 +9,9 @@
 //Нужны для перемещения курсора
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
+#define BACKGROUND 255, 255, 255
+#define BLOCKWIDTH 50
+#define BLOCKHEIGHT 50
 
 #include "Block.h"
 #include "Player.h"
@@ -16,21 +19,22 @@
 #include <windows.h>
 #include <iostream>
 #include <algorithm>
+#include <SFML/Graphics.hpp>
+
+using namespace sf;
 
 class Engine
 {
 	vector<Block> blocks;
-	Player player;
+	Player player{ WIDTH / 2, HEIGHT / 2 };
+	RenderWindow gameWindow { VideoMode(BLOCKWIDTH * WIDTH, BLOCKHEIGHT * HEIGHT), "TerrariaRemastered" };
+
 	char current_frame[HEIGHT][WIDTH];
 
 	void init_map();
 	void update_frame();
-	char** form_next_frame();
 	void control_enter();
 public:
 	void start_game();
 };
 
-
-void SetCursorPosition(int x, int y);
-void SetConsoleColour(unsigned short colour);
