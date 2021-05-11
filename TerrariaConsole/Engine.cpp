@@ -68,20 +68,20 @@ void Engine::start_game()
 
 		update_frame();
 		
-		if (!(counter++ % 5))
+		if (kbhit()) // Check Key-press
 		{
-			switch (rand() % 4)
+			switch (getch()) //Catch Key
 			{
-			case 0:
+			case 31: //S
 				player.moveDown();
 				break;
-			case 1:
+			case 17: //W
 				player.moveUp();
 				break;
-			case 2:
+			case 30: //A
 				player.moveLeft();
 				break;
-			case 3:
+			case 32: //D
 				player.moveRight();
 				break;
 			}
