@@ -65,23 +65,23 @@ void Engine::start_game()
 			if (ev.type == Event::Closed)
 				gameWindow.close();
 		}
-
+		
 		update_frame();
 		
 		if (kbhit()) // Check Key-press
 		{
 			switch (getch()) //Catch Key
 			{
-			case 31: //S
+			case 80: //S
 				player.moveDown();
 				break;
-			case 17: //W
+			case 72: //W
 				player.moveUp();
 				break;
-			case 30: //A
+			case 75: //A
 				player.moveLeft();
 				break;
-			case 32: //D
+			case 77: //D
 				player.moveRight();
 				break;
 			}
