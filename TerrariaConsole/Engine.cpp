@@ -65,23 +65,23 @@ void Engine::start_game()
 			if (ev.type == Event::Closed)
 				gameWindow.close();
 		}
-
+		
 		update_frame();
 		
-		if (!(counter++ % 5))
+		if (ev.type == Event::KeyPressed)
 		{
-			switch (rand() % 4)
+			switch (ev.key.code)
 			{
-			case 0:
+			case Keyboard::Key::Down:
 				player.moveDown();
 				break;
-			case 1:
+			case Keyboard::Key::Up:
 				player.moveUp();
 				break;
-			case 2:
+			case Keyboard::Key::Left:
 				player.moveLeft();
 				break;
-			case 3:
+			case Keyboard::Key::Right:
 				player.moveRight();
 				break;
 			}

@@ -20,6 +20,7 @@
 #include <iostream>
 #include <algorithm>
 #include <SFML/Graphics.hpp>
+#include <conio.h>
 
 using namespace sf;
 
