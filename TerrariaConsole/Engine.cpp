@@ -68,20 +68,20 @@ void Engine::start_game()
 		
 		update_frame();
 		
-		if (kbhit()) // Check Key-press
+		if (ev.type == Event::KeyPressed)
 		{
-			switch (getch()) //Catch Key
+			switch (ev.key.code)
 			{
-			case 80: //S
+			case Keyboard::Key::Down:
 				player.moveDown();
 				break;
-			case 72: //W
+			case Keyboard::Key::Up:
 				player.moveUp();
 				break;
-			case 75: //A
+			case Keyboard::Key::Left:
 				player.moveLeft();
 				break;
-			case 77: //D
+			case Keyboard::Key::Right:
 				player.moveRight();
 				break;
 			}
