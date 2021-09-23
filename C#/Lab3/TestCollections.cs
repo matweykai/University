@@ -27,36 +27,36 @@ namespace Lab3
         {
             var result = new ResearchTeam("ResName" + num, "CompName" + num, num, "TeamName" + num, TimeFrame.Long);
             
-            int artNum = new Random().Next(10);
+            int artNum = new Random(Seed:DateTime.Now.Millisecond).Next(10);
             for (int i = 0; i < artNum; i++)
                 result.AddPapers(new Paper("ArtName" + num, new Person("Author" + num, "Surname" + num, new DateTime(2000, 1, 1)), new DateTime(2020, 10, 10)));
             
             return result;
         }
-        public Dictionary<string, long> TestTime(string keyStr, Team keyTeam) 
+        public Dictionary<string, KeyValuePair<long, long>> TestTime(string keyStr, Team keyTeam) 
         {
-            var result = new Dictionary<string, long>();
+            var result = new Dictionary<string, KeyValuePair<long, long>>();
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
             strList.Contains(keyStr);
             sw.Stop();
-            result.Add("Поиск строки в списке", sw.ElapsedMilliseconds);
+            result.Add("Поиск строки в списке", new KeyValuePair<long, long>(sw.ElapsedMilliseconds, sw.ElapsedTicks));
 
             sw.Restart();
             teamList.Contains(keyTeam);
             sw.Stop();
-            result.Add("Поиск команды в списке", sw.ElapsedMilliseconds);
+            result.Add("Поиск команды в списке", new KeyValuePair<long, long>(sw.ElapsedMilliseconds, sw.ElapsedTicks));
 
             sw.Restart();
             resTeamDict.ContainsKey(keyTeam);
             sw.Stop();
-            result.Add("Поиск команды в словаре", sw.ElapsedMilliseconds);
+            result.Add("Поиск команды в словаре", new KeyValuePair<long, long>(sw.ElapsedMilliseconds, sw.ElapsedTicks));
 
             sw.Restart();
             resTeamDict2.ContainsKey(keyStr);
             sw.Stop();
-            result.Add("Поиск команды в словаре по строке", sw.ElapsedMilliseconds);
+            result.Add("Поиск команды в словаре по строке", new KeyValuePair<long, long>(sw.ElapsedMilliseconds, sw.ElapsedTicks));
 
             return result;
         }

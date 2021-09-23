@@ -38,7 +38,7 @@ namespace Lab3
         {
             string resultStr = "";
             for (int i = 0; i < resTeamList.Count; i++)
-                resultStr += "Элемент №" + (i + 1).ToString() + "\n" + resTeamList[i].ToString();
+                resultStr += "Элемент №" + (i + 1).ToString() + "\n" + resTeamList[i].ToString() + "\n";
 
             return resultStr;
         }
@@ -51,13 +51,12 @@ namespace Lab3
 
             return resultStr;
         }
-        public List<ResearchTeam> NGroup(int memNum) 
+        public List<ResearchTeam> NGroup(int memNum)
         {
-            List<ResearchTeam> result = new List<ResearchTeam>();
+            var result = new List<ResearchTeam>();
 
-            var tCollection = result.GroupBy(item => item.TeamMembers.Count).Where(group => group.Key == memNum);
-            foreach (var group in tCollection)
-                foreach (var item in group)
+            foreach (var group in resTeamList.GroupBy(team => team.TeamMembers.Count).Where(group => group.Key == memNum).ToList())
+                foreach(var item in group)
                     result.Add(item);
 
             return result;
@@ -91,6 +90,10 @@ namespace Lab3
             listCopy.Sort(new ResearchTeamComparer());
 
             return listCopy;
+        }
+        public List<ResearchTeam> GetResTeamList() 
+        {
+            return resTeamList;
         }
     }
 }

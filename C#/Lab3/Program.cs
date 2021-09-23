@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lab3
 {
@@ -17,42 +18,71 @@ namespace Lab3
             teamCollection.AddResearchTeams(new ResearchTeam("ResName___", "CompName___", 912, "Turner", TimeFrame.TwoYears));
             Console.WriteLine(teamCollection);
             //2
-            Console.WriteLine("Сортировка по номеру лицензии");
+            Console.WriteLine("\nСортировка по номеру лицензии");
             foreach (var item in teamCollection.GetSortedByLicenceList())
                 Console.WriteLine(item.ToShortString());
-            Console.WriteLine("Сортировка по названию исследований");
+            Console.WriteLine("\nСортировка по названию исследований");
             foreach (var item in teamCollection.GetSortedByResearchNameList())
                 Console.WriteLine(item.ToShortString());
-            Console.WriteLine("Сортировка по числу публикаций");
+            Console.WriteLine("\nСортировка по числу публикаций");
             foreach (var item in teamCollection.GetSortedByArticlesCount())
                 Console.WriteLine(item.ToShortString() + "Кол-во статей: " + item.ArticleList.Count);
             //3
-            Console.WriteLine("Минимальная лицензия: " + teamCollection.MinLicenceNumber);
-            Console.WriteLine("Исследования с сроком 2 года: ");
+            Console.WriteLine("\nМинимальная лицензия: " + teamCollection.MinLicenceNumber);
+            Console.WriteLine("\nИсследования с сроком 2 года: ");
             foreach (var item in teamCollection.TwoYearResearchTeams)
                 Console.WriteLine(item);
-            Console.WriteLine("Группировка по кол-ву объектов");
-            foreach (var item in teamCollection.NGroup(912))
-                Console.WriteLine(item);
+            Console.WriteLine("\nГруппировка по кол-ву объектов");
+            foreach (var group in teamCollection.GetResTeamList().GroupBy(team => team.ArticleList.Count))
+            {
+                Console.WriteLine("\nГруппа №" + group.Key);
+                foreach (var item in group)
+                    Console.WriteLine(item.ToShortString() + "Кол-во статей: " + item.ArticleList.Count);
+            }    
+            
             //4
-            int elCount = 1000000;
+            int elCount = 0;// = 1000000;
+            while (true)
+            {
+                try
+                {
+                    Console.Write("Введите кол-во элементов: ");
+                    elCount = Int32.Parse(Console.ReadLine());
+
+                    if (elCount <= 0)
+                    {
+                        Console.WriteLine("Число должно быть положительным! Повторите ввод");
+                        continue;
+                    }
+
+                    break;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Ошибка при вводе числа! Повторите ввод");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Число слишком большое! Повторите ввод");
+                }
+            }
 
             TestCollections testCollection = new TestCollections(elCount);
             List<Team> lst = testCollection.GetTeamList();
-            Console.WriteLine("Время для первого элемента: ");
+            Console.WriteLine("\nВремя для первого элемента: \n");
             PrintTime(lst[0], testCollection);
 
-            Console.WriteLine("Время для элемента в середине: ");
+            Console.WriteLine("\nВремя для элемента в середине: \n");
             PrintTime(lst[lst.Count / 2], testCollection);
 
-            Console.WriteLine("Время для элемента в конце: ");
+            Console.WriteLine("\nВремя для элемента в конце: \n");
             PrintTime(lst[lst.Count - 1], testCollection);
         }
         static void PrintTime(Team element, TestCollections testCollection) 
         {
             var timeDict = testCollection.TestTime(element.Name, element);
             foreach (var key in timeDict.Keys)
-                Console.WriteLine(key + " : " + timeDict[key]);
+                Console.WriteLine(key + $" : {timeDict[key].Key} мс ({timeDict[key].Value} тиков)");
         }
         public static IList<T> RandomShuffle<T>(this IEnumerable<T> list)
         {
